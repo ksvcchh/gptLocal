@@ -1,0 +1,7 @@
+.Message {
+    background-color: #faeeee;
+    border: solid #f6dede;
+    margin-bottom: 10px;
+    border-radius: 10px/30%;
+    padding: 5px 5px 5px 5px;
+}

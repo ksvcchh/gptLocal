@@ -1,0 +1,46 @@
+.wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.ChatWindow {
+    height: 80vh;
+    border: solid;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.Messages {
+    flex-grow: 1;
+    overflow: scroll;
+    width: 70vw;
+    text-align: right;
+    word-wrap: break-word;
+    scrollbar-width: none; /*for firefox*/
+    -ms-overflow-style: none; /*for internet explorer*/
+}
+
+.Messages::-webkit-scrollbar {
+    display: none; /*for safari and chrome*/
+}
+
+.Chat {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    justify-self: end;
+    align-self: end;
+}
+
+.Chat #chatInputField {
+    width: 70vw;
+}
+
+.Chat #sendButton {
+    margin-left: 1vw;
+    align-self: stretch;
+}
