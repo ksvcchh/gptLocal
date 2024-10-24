@@ -14,7 +14,10 @@ export default function Chat() {
 
     const sendMessage = async () => {
         if (inputValue.trim()) {
-            setMessages((prevMessages) => [...prevMessages, inputValue]);
+            setMessages((prevMessages) => [
+                ...prevMessages,
+                { sender: "user", content: inputValue },
+            ]);
             setInputValue("");
             const completion = await openai.chat.completions.create({
                 model: "gpt-4o-mini",
@@ -28,7 +31,10 @@ export default function Chat() {
             });
             setMessages((prevMessages) => [
                 ...prevMessages,
-                completion.choices[0].message.content,
+                {
+                    sender: "gpt",
+                    content: completion.choices[0].message.content,
+                },
             ]);
         }
     };
@@ -38,7 +44,11 @@ export default function Chat() {
             <div className="ChatWindow">
                 <div className="Messages">
                     {messages.map((message, index) => (
-                        <Message key={index} text={message} />
+                        <Message
+                            key={index}
+                            text={message.content}
+                            sender={message.sender}
+                        />
                     ))}
                 </div>
                 <div className="Chat">

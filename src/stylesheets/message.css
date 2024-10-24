@@ -1,7 +1,22 @@
-.Message {
+.MessageUser,
+.MessageGpt {
     background-color: #faeeee;
     border: solid #f6dede;
     margin-bottom: 10px;
     border-radius: 10px/30%;
     padding: 5px 5px 5px 5px;
+    text-align: left;
+}
+
+.MessageGpt {
+    max-width: 60vw;
+    white-space: pre-wrap;
+}
+
+.MessageUser {
+    margin-left: auto;
+    margin-right: 0;
+    max-width: 60vw;
+    display: inline-block; /* so that width of div would change depending on the length of text */
+    width: auto;
 }
