@@ -1,8 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import OpenAI from "openai";
-import "../stylesheets/chat.css";
 import Message from "../modules/message.js";
+import SendButton from "../modules/sendButton.js";
 import key from "../help/OPENAI_API_KEY";
+import "../stylesheets/chat.css";
+
+const model = "o1-mini";
 
 export default function Chat() {
     const openai = new OpenAI({
@@ -11,24 +14,46 @@ export default function Chat() {
     });
     const [messages, setMessages] = useState([]);
     const [inputValue, setInputValue] = useState("");
+    const [pendingStatus, setPendingStatus] = useState("normal");
+    const inputArea = useRef(null);
+
+    const keyDownHandler = (event) => {
+        if (
+            document.activeElement === inputArea.current &&
+            event.code === "Enter"
+        ) {
+            sendMessage();
+        }
+    };
+
+    useEffect(() => {
+        window.addEventListener("keydown", keyDownHandler);
+
+        return () => {
+            window.removeEventListener("keydown", keyDownHandler);
+        };
+    });
 
     const sendMessage = async () => {
         if (inputValue.trim()) {
+            setInputValue("");
+            setPendingStatus("pending");
+
             setMessages((prevMessages) => [
                 ...prevMessages,
                 { sender: "user", content: inputValue },
             ]);
-            setInputValue("");
+
             const completion = await openai.chat.completions.create({
-                model: "gpt-4o-mini",
+                model: model,
                 messages: [
-                    { role: "system", content: "You are a helpful assistant." },
                     {
                         role: "user",
                         content: inputValue,
                     },
                 ],
             });
+
             setMessages((prevMessages) => [
                 ...prevMessages,
                 {
@@ -36,6 +61,8 @@ export default function Chat() {
                     content: completion.choices[0].message.content,
                 },
             ]);
+
+            setPendingStatus("normal");
         }
     };
 
@@ -53,14 +80,16 @@ export default function Chat() {
                 </div>
                 <div className="Chat">
                     <textarea
+                        ref={inputArea}
                         id="chatInputField"
                         value={inputValue}
                         onChange={(e) => setInputValue(e.target.value)}
                         placeholder="Your message..."
                     />
-                    <button id="sendButton" onClick={sendMessage}>
-                        Send!
-                    </button>
+                    <SendButton
+                        pendingStatus={pendingStatus}
+                        sendMessage={sendMessage}
+                    />
                 </div>
             </div>
         </div>
