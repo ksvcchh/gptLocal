@@ -22,6 +22,7 @@ export default function Chat() {
             document.activeElement === inputArea.current &&
             event.code === "Enter"
         ) {
+            event.preventDefault();
             sendMessage();
         }
     };
